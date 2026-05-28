@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 public class VaultEcoHook implements VaultHook {
 
@@ -76,11 +77,12 @@ public class VaultEcoHook implements VaultHook {
 
         if (eco != null && baltopEnabled) {
             BalTopTask balTopRunner = new BalTopTask(this, perms);
-            this.balTopTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(
+            this.balTopTask = Bukkit.getAsyncScheduler().runAtFixedRate(
                     expansion.getPlaceholderAPI(),
                     task -> balTopRunner.run(),
-                    20L,
-                    20L * taskDelay);
+                    1,
+                    taskDelay,
+                    TimeUnit.SECONDS);
         }
         return eco != null;
     }
