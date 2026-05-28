@@ -22,7 +22,6 @@ package com.extendedclip.papi.expansion.vault;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,7 +29,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
 
-class BalTopTask extends BukkitRunnable {
+class BalTopTask implements Runnable {
 
     private final VaultEcoHook eco;
     private final VaultPermsHook perms;

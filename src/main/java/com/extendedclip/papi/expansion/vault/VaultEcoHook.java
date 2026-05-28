@@ -20,6 +20,7 @@
  */
 package com.extendedclip.papi.expansion.vault;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -47,7 +48,7 @@ public class VaultEcoHook implements VaultHook {
     private final Map<Integer, TopPlayer> balTop = new TreeMap<>();
     private Economy eco;
     private VaultPermsHook perms;
-    private BalTopTask balTopTask;
+    private ScheduledTask balTopTask;
 
     VaultEcoHook(VaultExpansion expansion, VaultPermsHook perms) {
         this.expansion = expansion;
@@ -74,8 +75,12 @@ public class VaultEcoHook implements VaultHook {
         eco = rsp.getProvider();
 
         if (eco != null && baltopEnabled) {
-            this.balTopTask = new BalTopTask(this, perms);
-            balTopTask.runTaskTimerAsynchronously(expansion.getPlaceholderAPI(), 20, 20 * taskDelay);
+            BalTopTask balTopRunner = new BalTopTask(this, perms);
+            this.balTopTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(
+                    expansion.getPlaceholderAPI(),
+                    task -> balTopRunner.run(),
+                    20L,
+                    20L * taskDelay);
         }
         return eco != null;
     }

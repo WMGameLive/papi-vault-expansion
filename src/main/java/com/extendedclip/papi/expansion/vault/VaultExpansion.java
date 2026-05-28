@@ -52,7 +52,16 @@ public class VaultExpansion extends PlaceholderExpansion implements Cacheable, C
 
     @Override
     public boolean canRegister() {
-        return Bukkit.getPluginManager().getPlugin(getRequiredPlugin()) != null;
+        return isFolia() && Bukkit.getPluginManager().getPlugin(getRequiredPlugin()) != null;
+    }
+
+    private boolean isFolia() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     @Override
